@@ -1,0 +1,39 @@
+{
+  "name": "ntb-import",
+  "version": "1.0.0",
+  "description": "My Enonic XP project",
+  "license": "Apache-2.0",
+  "private": true,
+  "scripts": {
+    "build:ser:ver": "webpack --config webpack.server.config.js --color",
+    "build": "run-p -c build:*",
+    "dist:server": "cross-env NODE_ENV=production webpack --config webpack.server.config.js --color",
+    "dist": "run-p -c dist:*",
+    "lint": "eslint --fix 'src/**/*.ts'"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.24.0",
+    "@typescript-eslint/parser": "^4.24.0",
+    "browserslist-config-enonic": "^1.0.6",
+    "cross-env": "^7.0.3",
+    "enonic-types": "^0.2.2",
+    "eslint": "^7.26.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "file-loader": "^6.2.0",
+    "glob": "^7.1.7",
+    "prettier": "^2.3.0",
+    "ramda": "^0.27.1",
+    "ts-loader": "^9.2.1",
+    "typescript": "^4.2.2",
+    "webpack": "^5.37.1",
+    "webpack-cli": "^4.7.0"
+  },
+  "browserslist": [
+    "extends browserslist-config-enonic"
+  ],
+  "engines": {
+    "node": ">= 14.15.0",
+    "npm": ">= 6.14.8"
+  }
+}

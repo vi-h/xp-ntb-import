@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+  <form>
+    <input name="parentId" type="ContentSelector">
+      <label i18n="site.parentId">Folder where articles are stored</label>
+      <occurrences minimum="1" maximum="1"/>
+    </input>
+
+    <input name="publisher" type="TextLine">
+      <label i18n="site.publisher">Publisher id</label>
+      <occurrences minimum="1" maximum="1"/>
+      <help-text i18n="site.numericHelpText">8 character numeric id</help-text>
+      <config>
+        <max-length>8</max-length>
+      </config>
+    </input>
+
+    <input name="channels" type="TextLine">
+      <label i18n="site.channels">Channels</label>
+      <occurrences minimum="1" maximum="1"/>
+      <help-text i18n="site.numericHelpText">8 character numeric id</help-text>
+      <config>
+        <max-length>8</max-length>
+      </config>
+    </input>
+  </form>
+</site>

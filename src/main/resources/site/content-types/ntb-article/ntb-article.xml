@@ -1,0 +1,108 @@
+<content-type>
+	<display-name i18n="ntbArticle.displayName">NTB article</display-name>
+  <description i18n="ntbArticle.description">Article imported from the NTB service</description>
+	<super-type>base:structured</super-type>
+
+	<form>
+		<input name="title" type="TextLine">
+			<label i18n="ntbArticle.title">Title</label>
+			<occurrences minimum="1" maximum="1"/>
+		</input>
+
+		<input name="leadtext" type="HtmlArea">
+			<label i18n="ntbArticle.leadtext">Lead text</label>
+			<occurrences minimum="1" maximum="1"/>
+		</input>
+
+		<input name="body" type="HtmlArea">
+			<label i18n="ntbArticle.body">Article text</label>
+			<occurrences minimum="1" maximum="1"/>
+			<config>
+				<exclude>*</exclude>
+				<include>styleselect | alignleft aligncenter alignright | bullist numlist | italic charmap blockquote |
+					image table macro link unlink
+				</include>
+			</config>
+		</input>
+
+		<!-- Main image -->
+    <input name="imageId" type="ImageSelector" >
+      <label i18n="ntbArticle.imageId">Main image</label>
+      <occurrences minimum="0" maximum="1"/>
+    </input>
+
+		<!-- Attachments -->
+    <input name="images" type="ImageSelector">
+      <label i18n="ntbArticle.images">Images</label>
+      <occurrences minimum="0" maximum="0"/>
+    </input>
+
+		<!-- Links -->
+		<item-set name="links">
+			<label i18n="ntbArticle.links">Links</label>
+			<occurrences minimum="0" maximum="0"/>
+
+			<items>
+				<input name="url" type="Textline" >
+					<label i18n="ntbArticle.links.url">Url</label>
+					<occurrences minimum="1" maximum="1"/>
+				</input>
+
+				<input name="description" type="TextLine" >
+					<label i18n="ntbArticle.links.description">Description</label>
+					<occurrences minimum="1" maximum="1"/>
+				</input>
+			</items>
+		</item-set>
+
+		<!-- Keywords -->
+    <input name="keywords" type="Tag">
+      <label i18n="ntbArticle.keywords">Keywords</label>
+      <occurrences minimum="0" maximum="0"/>
+    </input>
+
+		<field-set name="meta">
+			<label i18n="ntbArticle.meta">Metadata</label>
+			<items>
+				<input name="ntbId" type="Long">
+					<label i18n="ntbArticle.ntbId">NTB id</label>
+					<occurrences minimum="1" maximum="1"/>
+					<indexed>true</indexed>
+				</input>
+
+				<input name="published" type="DateTime">
+					<label i18n="ntbArticle.published">Published</label>
+					<config>
+						<timezone>true</timezone>
+					</config>
+					<occurrences minimum="1" maximum="1"/>
+				</input>
+
+				<input name="url" type="TextLine">
+					<label i18n="ntbArticle.url">NTB url</label>
+					<occurrences minimum="1" maximum="1"/>
+				</input>
+
+				<input name="type" type="TextLine">
+					<label i18n="ntbArticle.type">Type</label>
+					<occurrences minimum="1" maximum="1"/>
+				</input>
+
+				<input name="publisherId" type="Long">
+					<label i18n="ntbArticle.publisherId">NTB publisher id</label>
+					<occurrences minimum="1" maximum="1"/>
+				</input>
+
+				<input name="channelId" type="Long">
+					<label i18n="ntbArticle.channelId">NTB channel id</label>
+					<occurrences minimum="1" maximum="1"/>
+				</input>
+
+				<input name="language" type="TextLine">
+					<label i18n="ntbArticle.language">Language</label>
+					<occurrences minimum="1" maximum="1"/>
+				</input>
+			</items>
+		</field-set>
+	</form>
+</content-type>
