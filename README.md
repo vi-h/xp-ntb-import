@@ -20,6 +20,11 @@ When you add the NTB Import application to your *site*, you have to configure th
  2. Publisher id (8 digit number from NTB)
  3. Channels (8 digit number from NTB)
 
+### Manual Article Import
+
+You can manually run an import by running the  `ntb-import` service, which can be found on the following url-path: 
+*/_/service/no.item.ntb/ntb-import*
+
 ### Automatic Article Import
 
 The application has a [cron job](./src/main/resources/main.ts) that runs an import job **every hour on the hour**. If there 
