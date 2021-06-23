@@ -13,5 +13,5 @@ export interface SiteConfig {
   /**
    * Channels
    */
-  channels: string;
+  channels?: string;
 }

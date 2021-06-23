@@ -17,12 +17,6 @@
 		<input name="body" type="HtmlArea">
 			<label i18n="ntbArticle.body">Article text</label>
 			<occurrences minimum="1" maximum="1"/>
-			<config>
-				<exclude>*</exclude>
-				<include>styleselect | alignleft aligncenter alignright | bullist numlist | italic charmap blockquote |
-					image table macro link unlink
-				</include>
-			</config>
 		</input>
 
 		<!-- Main image -->
