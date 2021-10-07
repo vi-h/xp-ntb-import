@@ -1,6 +1,9 @@
 # NTB Import
 
-Enonic XP Application that imports articles from [NTB](https://www.ntb.no/) and creates `Content` in XP.
+Enonic XP Application that imports articles from [NTB Kommunikasjon](https://kommunikasjon.ntb.no/) and creates `Content` in XP.
+
+| :information_source: You need to have a subscription from [NTB Kommunikasjon](https://kommunikasjon.ntb.no/bli-kunde) to use this library. |
+|------|
 
 [![](https://jitpack.io/v/no.item/xp-ntb-import.svg)](https://jitpack.io/#no.item/xp-ntb-import)
 
