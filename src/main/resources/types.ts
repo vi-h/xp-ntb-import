@@ -6,7 +6,7 @@ declare const __non_webpack_require__: <K extends keyof LibMap | string = string
 ) => K extends keyof LibMap ? LibMap[K] : unknown;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-declare const resolve: (path: string) => import("enonic-types/thymeleaf").ResourceKey;
+declare const resolve: (path: string) => import("/lib/thymeleaf").ResourceKey;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 declare const app: {

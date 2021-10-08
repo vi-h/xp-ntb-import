@@ -1,5 +1,4 @@
-import { HttpResponse } from "enonic-types/http";
-import { request } from "/lib/http-client";
+import { request, HttpResponse } from "/lib/http-client";
 
 const URL_NTB = "https://kommunikasjon.ntb.no/json/v2/releases";
 

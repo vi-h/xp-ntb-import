@@ -1,4 +1,4 @@
-import { CronRunContext } from "enonic-types/cron";
+import { CronRunContext } from "/lib/cron";
 import * as cronLib from "/lib/cron";
 import { importFromNtb } from "./lib/ntb-import";
 

@@ -1,10 +1,9 @@
-import { Content, MediaImage } from "enonic-types/content";
+import { create, createMedia, modify, publish, query, Content, MediaImage } from "/lib/xp/content";
+import { sanitize } from "/lib/xp/common";
+import { request } from "/lib/http-client";
 import { PressRelease, getPressReleases } from "./ntb";
 import { NtbArticle } from "../site/content-types/ntb-article/ntb-article";
 import { getContentPathById, notNullOrUndefined, substringAfter } from "./utils";
-import { sanitize } from "/lib/xp/common";
-import { request } from "/lib/http-client";
-import { create, createMedia, modify, publish, query } from "/lib/xp/content";
 import { SiteConfig } from "../site/site-config";
 import { getSiteConfigInCron } from "./portal";
 

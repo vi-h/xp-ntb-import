@@ -1,5 +1,4 @@
-import { Site } from "enonic-types/content";
-import { query } from "/lib/xp/content";
+import { query, Site } from "/lib/xp/content";
 import { forceArray } from "./utils";
 
 export function getSiteInCron<Config extends object>(): Site<Config> {
