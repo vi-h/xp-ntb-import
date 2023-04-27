@@ -1,15 +1,15 @@
-import { CronRunContext } from "/lib/cron";
+import type { ContextParams } from "/lib/xp/context";
 import * as cronLib from "/lib/cron";
-import { importFromNtb } from "./lib/ntb-import";
+import { importFromNtb } from "/lib/ntb-import";
 
 const CRON_EVERY_HOUR = "0 * * * *";
 
-export const context: CronRunContext = {
+export const context: ContextParams = {
   branch: "draft",
   principals: ["role:system.admin"],
   user: {
     login: "su",
-    userStore: "system",
+    idProvider: "system",
   },
   repository: "com.enonic.cms.default",
 };

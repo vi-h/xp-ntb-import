@@ -23,7 +23,7 @@ export interface NtbArticle {
   /**
    * Images
    */
-  images?: Array<string>;
+  images?: Array<string> | string;
 
   /**
    * Links
@@ -43,7 +43,7 @@ export interface NtbArticle {
   /**
    * Keywords
    */
-  keywords?: Array<string>;
+  keywords?: Array<string> | string;
 
   /**
    * NTB id
@@ -79,4 +79,9 @@ export interface NtbArticle {
    * Language
    */
   language: string;
+
+  /**
+   * GraphQL name. Also used for separating unions in TypeScript
+   */
+  __typename?: "no_item_ntb_NtbArticle_Data";
 }

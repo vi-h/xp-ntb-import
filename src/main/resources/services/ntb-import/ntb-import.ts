@@ -1,10 +1,11 @@
 import { schedule } from "/lib/cron";
-import { importFromNtb } from "../../lib/ntb-import";
+import { importFromNtb } from "/lib/ntb-import";
 import { context } from "../../main";
+import type { Response } from "@item-enonic-types/global/controller";
 
 const MIME_TYPE_JSON = "application/json";
 
-export function get(): XP.Response {
+export function get(): Response {
   try {
     schedule({
       name: "import-from-ntb",

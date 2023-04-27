@@ -6,10 +6,6 @@
     "sourceMap": false,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "types": [
-      "node",
-      "enonic-types"
-    ]
   },
   "exclude": [
     "assets"

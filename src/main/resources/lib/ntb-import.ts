@@ -1,16 +1,15 @@
-import { create, createMedia, modify, publish, query, Content, MediaImage } from "/lib/xp/content";
+import { create, createMedia, modify, publish, query, type Content } from "/lib/xp/content";
 import { sanitize } from "/lib/xp/common";
 import { request } from "/lib/http-client";
 import { PressRelease, getPressReleases } from "./ntb";
-import { NtbArticle } from "../site/content-types/ntb-article/ntb-article";
 import { getContentPathById, notNullOrUndefined, substringAfter } from "./utils";
-import { SiteConfig } from "../site/site-config";
 import { getSiteConfigInCron } from "./portal";
+import type { NtbArticle } from "/site/content-types/ntb-article";
 
 const CONTENT_CREATE_FAILED = null;
 
 export function importFromNtb(): void {
-  const params = getSiteConfigInCron<SiteConfig>();
+  const params = getSiteConfigInCron<XP.SiteConfig>();
   const parentPath = getContentPathById(params.parentId);
   const pressReleases = getPressReleases({
     publisher: params.publisher,
@@ -72,10 +71,9 @@ function importPressRelease(pressRelease: PressRelease, parentPath: string) {
         content.data.images = imageIds;
         return content;
       },
-    })._id;
+    })?._id;
   } catch (e) {
-    log.error(`Unexpected error: ${e.message}`);
-    log.error(String(e));
+    log.error(`Could not import press release`, e);
 
     return CONTENT_CREATE_FAILED;
   }
@@ -88,6 +86,11 @@ function notAlreadyImported(pressRelease: PressRelease): boolean {
       count: 1,
     }).count === 0
   );
+}
+
+interface MediaImage {
+  caption?: string;
+  altText?: string;
 }
 
 function createImageContent(
@@ -120,7 +123,7 @@ function createImageContent(
       },
     });
   } else {
-    log.warning(`Could not retrieve image for NTB import: url=${url}, status=${status} `);
+    log.warning(`Could not retrieve image for NTB import: url=${url}, status=${imageResponse.status} `);
     return CONTENT_CREATE_FAILED;
   }
 }
