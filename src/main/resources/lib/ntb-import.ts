@@ -1,15 +1,16 @@
-import { create, createMedia, modify, publish, query, type Content } from "/lib/xp/content";
+import { create, createMedia, modify, publish, query, exists, type Content } from "/lib/xp/content";
 import { sanitize } from "/lib/xp/common";
 import { request } from "/lib/http-client";
 import { PressRelease, getPressReleases } from "./ntb";
 import { getContentPathById, notNullOrUndefined, substringAfter } from "./utils";
 import { getSiteConfigInCron } from "./portal";
 import type { NtbArticle } from "/site/content-types/ntb-article";
+import type { SiteConfig } from "/site/index";
 
 const CONTENT_CREATE_FAILED = null;
 
 export function importFromNtb(): void {
-  const params = getSiteConfigInCron<XP.SiteConfig>();
+  const params = getSiteConfigInCron<SiteConfig>();
   const parentPath = getContentPathById(params.parentId);
   const pressReleases = getPressReleases({
     publisher: params.publisher,
@@ -19,6 +20,7 @@ export function importFromNtb(): void {
 
   const createdContentIds = pressReleases
     .filter(notAlreadyImported)
+    .filter((pressRelease) => !exists({ key: `${parentPath}/${sanitize(pressRelease.title)}` }))
     .map((pressRelease) => importPressRelease(pressRelease, parentPath))
     .filter(notNullOrUndefined);
 
@@ -80,12 +82,12 @@ function importPressRelease(pressRelease: PressRelease, parentPath: string) {
 }
 
 function notAlreadyImported(pressRelease: PressRelease): boolean {
-  return (
-    query({
-      query: `data.ntbId = '${pressRelease.id}'`,
-      count: 1,
-    }).count === 0
-  );
+  const res = query({
+    query: `data.ntbId = '${pressRelease.id}'`,
+    count: 1,
+  });
+
+  return res.count === 0;
 }
 
 interface MediaImage {

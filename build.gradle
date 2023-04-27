@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'maven-publish'
     id "com.github.node-gradle.node" version '3.4.0'
     id 'com.enonic.xp.app' version '3.1.0'
     id 'no.item.xp.codegen' version '2.2.2'
@@ -23,14 +24,15 @@ dependencies {
 }
 
 repositories {
-    mavenLocal()
-    jcenter()
-    xp.enonicRepo()
+  mavenLocal()
+  mavenCentral()
+  xp.enonicRepo()
+  maven { url 'https://jitpack.io' }
 }
 
 node {
     download = true
-    version = '16.1.0'
+    version = '16.15.0'
 }
 
 task npmInstallForce( type: NpmTask ) {
@@ -40,16 +42,6 @@ task npmInstallForce( type: NpmTask ) {
 
 task cleanNode( type: org.gradle.api.tasks.Delete ) {
     delete 'node_modules'
-}
-
-
-task clientWebpack( type: NodeTask, dependsOn: npmInstall ) {
-    environment = [ 'NODE_ENV': nodeEnvironment() ]
-    args = [ '--config', 'webpack.client.config.js', '--color']
-    description = 'Build UI resources (js, css, etc).'
-    inputs.dir 'src/main'
-    outputs.dir "${buildDir}/resources/main"
-    script = file( 'node_modules/webpack-cli/bin/cli.js' )
 }
 
 task serverWebpack( type: NodeTask, dependsOn: [npmInstall, generateTypeScript] ) {
@@ -92,4 +84,15 @@ def nodeEnvironment() {
     def environments = [ prod : 'production', dev: 'development' ]
     def nodeEnv = environments[hasProperty( 'env' ) ? env : 'prod']
     return nodeEnv != null ? nodeEnv : 'production'
+}
+
+publishing {
+  publications {
+    mavenJava(MavenPublication) {
+      from components.java
+      groupId group
+      artifactId projectName
+      version version
+    }
+  }
 }
