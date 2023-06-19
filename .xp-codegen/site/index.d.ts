@@ -18,6 +18,11 @@ declare global {
        * Channels
        */
       channels?: string;
+
+      /**
+       * Disable Import
+       */
+      disableImport: boolean;
     }
   }
 }

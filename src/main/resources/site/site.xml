@@ -23,5 +23,9 @@
         <max-length>8</max-length>
       </config>
     </input>
+
+    <input name="disableImport" type="CheckBox">
+      <label i18n="site.disableImport">Disable Import</label>
+    </input>
   </form>
 </site>

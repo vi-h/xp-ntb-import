@@ -1,6 +1,6 @@
 {
   "name": "ntb-import",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "",
   "license": "MIT",
   "private": true,
@@ -15,6 +15,7 @@
     "@enonic-types/lib-common": "^7.12.2",
     "@enonic-types/lib-content": "^7.12.2",
     "@enonic-types/lib-context": "^7.12.2",
+    "@enonic-types/lib-event": "^7.12.2",
     "@item-enonic-types/global": "^7.12.2",
     "@item-enonic-types/lib-cron": "^1.1.1",
     "@item-enonic-types/lib-http-client": "^3.2.1",
