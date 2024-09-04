@@ -15,7 +15,7 @@ export const context: ContextParams = {
     login: "su",
     idProvider: "system",
   },
-  repository: "com.enonic.cms.default",
+  repository: 'com.enonic.cms.entra-nettside',
 };
 
 // run on deployment
