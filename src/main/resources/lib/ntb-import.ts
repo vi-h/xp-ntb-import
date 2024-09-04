@@ -71,10 +71,6 @@ function importPressRelease(pressRelease: PressRelease, parentPath: string) {
       editor: (content) => {
         content.data.imageId = imageContent?._id;
         content.data.images = imageIds;
-        content.workflow = {
-          state: "READY",
-          checks: {}
-        };
         return content;
       },
     })?._id;

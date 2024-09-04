@@ -4,6 +4,7 @@ import { importFromNtb } from "/lib/ntb-import";
 import { getSiteConfigInCron } from "/lib/portal";
 import { EnonicEventDataNode, listener } from "/lib/xp/event";
 import { SiteConfig } from "/site/index";
+import { run } from "/lib/xp/context";
 
 const CRON_NAME = "import-from-ntb";
 const CRON_EVERY_HOUR = "0 * * * *";
@@ -15,6 +16,7 @@ export const context: ContextParams = {
     login: "su",
     idProvider: "system",
   },
+  // TODO: update so we check all content repos, and do not have to hardcode this value
   repository: 'com.enonic.cms.entra-nettside',
 };
 
@@ -33,7 +35,7 @@ listener({
 });
 
 function toggleImport() {
-  const { disableImport } = getSiteConfigInCron<SiteConfig>();
+  const { disableImport } = run(context, () => getSiteConfigInCron<SiteConfig>());
 
   if (disableImport) {
     unschedule({ name: CRON_NAME });
