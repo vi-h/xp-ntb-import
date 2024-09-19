@@ -24,7 +24,7 @@ export function importFromNtb(): void {
     .map((pressRelease) => importPressRelease(pressRelease, parentPath))
     .filter(notNullOrUndefined);
 
-  log.info(`Created ${createdContentIds.length} articles by importing form NTB`);
+  log.info(`Created ${createdContentIds.length} articles by importing from NTB`);
 
   const publishResults = publish({
     keys: createdContentIds,
@@ -141,7 +141,7 @@ function pressReleaseToNtbArticle(pressRelease: PressRelease): NtbArticle {
     published: pressRelease.published,
     url: `https://kommunikasjon.ntb.no${pressRelease.url}`,
     publisherId: pressRelease.publisher.id,
-    channelId: pressRelease.channels[0].id,
+    channelId: pressRelease.channels.length > 0 ? pressRelease.channels[0].id : undefined,
     type: pressRelease.type,
     language: pressRelease.language,
   };
