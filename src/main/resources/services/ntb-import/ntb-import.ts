@@ -1,5 +1,5 @@
 import { schedule } from "/lib/cron";
-import { importFromNtb } from "/lib/ntb-import";
+import { importMultipleFromNtb } from "/lib/ntb-import";
 import { context } from "../../main";
 import type { Response } from "@item-enonic-types/global/controller";
 
@@ -12,7 +12,7 @@ export function get(): Response {
       delay: 1,
       fixedDelay: 1,
       times: 1,
-      callback: () => importFromNtb(),
+      callback: () => importMultipleFromNtb(),
       context,
     });
 
