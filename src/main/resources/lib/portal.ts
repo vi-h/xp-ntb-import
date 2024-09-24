@@ -1,8 +1,14 @@
 import { query, type Site } from "/lib/xp/content";
-import { forceArray } from "./utils";
+import { forceArray, buildBaseContext } from "./utils";
 import { list, type Repository } from "/lib/xp/repo";
-import { type ContextParams, run } from "/lib/xp/context";
+import { run } from "/lib/xp/context";
 import type { SiteConfig } from "/site/index";
+
+export interface RepoSiteAppConfig {
+  repoId: string,
+  siteName: string,
+  appConfig: SiteConfig,
+}
 
 function getSites<Config extends object>(): Site<Config>[] {
   return query<Site<Config>>({
@@ -11,37 +17,32 @@ function getSites<Config extends object>(): Site<Config>[] {
   }).hits;
 }
 
-export const runInDraftContext = (callback: () => void, repository: string, params: []) => {
-  if (!repository) {
-    repository = "com.enonic.cms.default"; // Best guess... This shouldn't happen!
+export const runInDraftRepoContext = (callback: () => void, repositoryId: string, params: []) => {
+  if (!repositoryId) {
+    repositoryId = "com.enonic.cms.default"; // Best guess... This shouldn't happen!
   }
 
-  const context: ContextParams = {
-    repository: repository,
-    branch: "draft",
-    principals: ["role:system.admin"],
-    user: {
-      login: "su"
-    }
-  };
-
-  return run(context, () => callback(...params));
+  return run(buildBaseContext(repositoryId), () => callback(...params));
 };
 
-export function getSiteConfigsInCron(): SiteConfig[] {
-  const siteConfigs: SiteConfig[] = [];
+export function getSiteConfigsInCron(): RepoSiteAppConfig[] {
+  const siteConfigs: RepoSiteAppConfig[] = [];
   const repolist: Repository[] = list();
   const filteredRepolist = repolist.filter( (repository) => repository.branches.indexOf("draft") >= 0 )
     .map( (repository) => repository.id );
 
-  filteredRepolist.forEach(repository => {
-    runInDraftContext(() => {
+  filteredRepolist.forEach((repositoryId) => {
+    runInDraftRepoContext(() => {
       const sites = getSites();
       sites.forEach((site) => {
         const ntbAppGeneralSiteConfig = forceArray(site?.data?.siteConfig).filter((cfg) => cfg.applicationKey === app.name)[0];
-        siteConfigs.push(ntbAppGeneralSiteConfig.config as SiteConfig);
+        siteConfigs.push({
+          repoId: repositoryId,
+          siteName: site._name,
+          appConfig: ntbAppGeneralSiteConfig.config as SiteConfig
+        });
       });
-    }, repository, []);
+    }, repositoryId, []);
   });
 
   return siteConfigs;

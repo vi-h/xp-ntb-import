@@ -3,18 +3,12 @@ import { sanitize } from "/lib/xp/common";
 import { request } from "/lib/http-client";
 import { PressRelease, getPressReleases } from "./ntb";
 import { getContentPathById, notNullOrUndefined, substringAfter } from "./utils";
-import { getSiteConfigsInCron } from "./portal";
 import type { NtbArticle } from "/site/content-types/ntb-article";
 import type { SiteConfig } from "/site/index";
 
 const CONTENT_CREATE_FAILED = null;
 
-export function importMultipleFromNtb(): void {
-  const siteConfigs = getSiteConfigsInCron();
-  siteConfigs.forEach((siteConfig) => importFromNtb(siteConfig));
-}
-
-function importFromNtb(params: SiteConfig): void {
+export function importFromNtb(params: SiteConfig): void {
   const parentPath = getContentPathById(params.parentId);
   const pressReleases = getPressReleases({
     publisher: params.publisher,

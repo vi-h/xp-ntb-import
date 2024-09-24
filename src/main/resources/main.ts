@@ -1,22 +1,12 @@
-import type { ContextParams } from "/lib/xp/context";
 import { schedule, unschedule } from "/lib/cron";
-import { importFromNtb } from "/lib/ntb-import";
-import { getSiteConfigInCron } from "/lib/portal";
+import {importFromNtb } from "/lib/ntb-import";
+import { getSiteConfigsInCron } from "/lib/portal";
 import { EnonicEventDataNode, listener } from "/lib/xp/event";
-import { SiteConfig } from "/site/index";
+import { run } from "/lib/xp/context";
+import { buildBaseContext } from "/lib/utils";
 
 const CRON_NAME = "import-from-ntb";
 const CRON_EVERY_HOUR = "0 * * * *";
-
-export const context: ContextParams = {
-  branch: "draft",
-  principals: ["role:system.admin"],
-  user: {
-    login: "su",
-    idProvider: "system",
-  },
-  repository: "com.enonic.cms.default",
-};
 
 // run on deployment
 toggleImport();
@@ -24,33 +14,42 @@ toggleImport();
 listener({
   type: "node.updated",
   callback: (event) => {
+    log.info("--- node.updated!");
+    log.info(`event: ${JSON.stringify(event, null, 2)}`);
+    // TODO: get correct context!
     const siteWasUpdated = event.data.nodes.some(isRoot);
 
     if (siteWasUpdated) {
+      log.info(`This site was updated: ${siteWasUpdated}`);
       toggleImport();
     }
   },
 });
 
 function toggleImport() {
-  const { disableImport } = getSiteConfigInCron<SiteConfig>();
+  const siteConfigsInCron = run(buildBaseContext(), () => getSiteConfigsInCron());
 
-  if (disableImport) {
-    unschedule({ name: CRON_NAME });
-  } else {
-    schedule({
-      name: CRON_NAME,
-      cron: CRON_EVERY_HOUR,
-      callback: () => importFromNtb(),
-      context,
-    });
-  }
+  siteConfigsInCron.forEach((siteWithConfig) => {
+    const { disableImport } = siteWithConfig.appConfig;
+    const scheduleJobName = `${CRON_NAME}_${siteWithConfig.siteName}`;
 
-  log.info(
-    disableImport
-      ? `Unscheduled cron job "${CRON_NAME}"`
-      : `Create cron job for "${CRON_NAME}" that runs "${CRON_EVERY_HOUR}"`
-  );
+    if (disableImport) {
+      unschedule({ name: scheduleJobName });
+    } else {
+      schedule({
+        name: scheduleJobName,
+        cron: CRON_EVERY_HOUR,
+        callback: () => importFromNtb(siteWithConfig.appConfig),
+        context: buildBaseContext(siteWithConfig.repoId),
+      });
+    }
+
+    log.info(
+      disableImport
+        ? `Unscheduled cron job "${CRON_NAME}"`
+        : `Create cron job for "${CRON_NAME}" that runs "${CRON_EVERY_HOUR}"`
+    );
+  })
 }
 
 function isRoot(node: EnonicEventDataNode): boolean {
