@@ -1,6 +1,6 @@
 import { schedule, unschedule } from "/lib/cron";
 import {importFromNtb } from "/lib/ntb-import";
-import { getSiteConfigsInCron } from "/lib/portal";
+import {getAllSiteConfigsInCron, getSiteConfigsFromNodes, RepoSiteAppConfig} from "/lib/portal";
 import { EnonicEventDataNode, listener } from "/lib/xp/event";
 import { run } from "/lib/xp/context";
 import { buildBaseContext } from "/lib/utils";
@@ -14,20 +14,22 @@ toggleImport();
 listener({
   type: "node.updated",
   callback: (event) => {
-    log.info("--- node.updated!");
-    log.info(`event: ${JSON.stringify(event, null, 2)}`);
-    // TODO: get correct context!
     const siteWasUpdated = event.data.nodes.some(isRoot);
 
     if (siteWasUpdated) {
-      log.info(`This site was updated: ${siteWasUpdated}`);
-      toggleImport();
+      toggleImport(getSiteConfigsFromNodes(event.data.nodes));
     }
   },
 });
 
-function toggleImport() {
-  const siteConfigsInCron = run(buildBaseContext(), () => getSiteConfigsInCron());
+function toggleImport(siteConfig?: RepoSiteAppConfig[]) {
+  let siteConfigsInCron;
+
+  if (siteConfig) {
+    siteConfigsInCron = siteConfig;
+  } else {
+    siteConfigsInCron =  run(buildBaseContext(), () => getAllSiteConfigsInCron());
+  }
 
   siteConfigsInCron.forEach((siteWithConfig) => {
     const { disableImport } = siteWithConfig.appConfig;
@@ -46,8 +48,8 @@ function toggleImport() {
 
     log.info(
       disableImport
-        ? `Unscheduled cron job "${CRON_NAME}"`
-        : `Create cron job for "${CRON_NAME}" that runs "${CRON_EVERY_HOUR}"`
+        ? `Unscheduled cron job "${scheduleJobName}"`
+        : `Create cron job for "${scheduleJobName}" that runs "${CRON_EVERY_HOUR}"`
     );
   })
 }

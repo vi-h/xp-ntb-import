@@ -1,13 +1,13 @@
 import { schedule } from "/lib/cron";
 import { importFromNtb } from "/lib/ntb-import";
 import type { Response } from "@item-enonic-types/global/controller";
-import { getSiteConfigsInCron } from "/lib/portal";
+import { getAllSiteConfigsInCron } from "/lib/portal";
 import { buildBaseContext } from "/lib/utils";
 
 const MIME_TYPE_JSON = "application/json";
 
 export function get(): Response {
-  const siteConfigsInCron = getSiteConfigsInCron();
+  const siteConfigsInCron = getAllSiteConfigsInCron();
 
   try {
     siteConfigsInCron.forEach((siteWithConfig) => {
