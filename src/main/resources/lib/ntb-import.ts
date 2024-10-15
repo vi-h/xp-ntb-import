@@ -46,7 +46,7 @@ export function importFromNtb(params: SiteConfig, page?: number): void {
     log.error(`Failed to publish ${publishResults.failedContents.length} as part of import from NTB`);
   }
 
-  if (ntbResponsePressReleases.nextPage) {
+  if (params?.fetchAllPressReleases && ntbResponsePressReleases.nextPage) {
     log.info(`There exists more pages, getting the next press releases from page: ${ntbResponsePressReleases.nextPage}`);
     importFromNtb(params, ntbResponsePressReleases.nextPage);
   }
